@@ -58,6 +58,18 @@ python3 synthesize.py --source preprocessed_data/LJSpeech/val.txt --restore_step
 ```
 to synthesize all utterances in ``preprocessed_data/LJSpeech/val.txt``
 
+Input needs to be of format:
+
+```
+LJ042-0094|LJSpeech|{DH IY0 S OW1 V IY0 AH0 T AH0 TH AO1 R AH0 T IY0 Z D IH0 N AY1 D AO1 Z W AO0 L D sp P ER0 M IH1 SH AH0 N}|the soviet authorities denied oswald permission
+```
+
+In original version of FS2, the input file needs to contain phoneme level data for batch inference, as opposed to synchronous mode. In this branch, you do not need to provide the phoneme level information instead we use G2p model to generate the phoneme sequence. With this update, input can be of format:
+
+```
+LJ042-0094|LJSpeech||the soviet authorities denied oswald permission
+```
+
 ## Controllability
 The pitch/volume/speaking rate of the synthesized utterances can be controlled by specifying the desired pitch/energy/duration ratios.
 For example, one can increase the speaking rate by 20 % and decrease the volume by 20 % by
