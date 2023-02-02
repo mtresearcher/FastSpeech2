@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib
 from scipy.io import wavfile
 from matplotlib import pyplot as plt
+import re
 
 
 matplotlib.use("Agg")
@@ -66,6 +67,18 @@ def to_device(data, device):
             durations = torch.from_numpy(durations).to(device)
 
         return (ids, raw_texts, speakers, texts, src_lens, max_src_len, durations)
+
+
+def read_lexicon(lex_path):
+    lexicon = {}
+    with open(lex_path) as f:
+        for line in f:
+            temp = re.split(r"\s+", line.strip("\n"))
+            word = temp[0]
+            phones = temp[1:]
+            if word.lower() not in lexicon:
+                lexicon[word.lower()] = phones
+    return lexicon
 
 
 def log(

@@ -3,11 +3,12 @@ import math
 import os
 
 import numpy as np
+import re
 from torch.utils.data import Dataset
 
 from text import text_to_sequence
-from utils.tools import pad_1D, pad_2D
-
+from utils.tools import pad_1D, pad_2D, read_lexicon
+from g2p_en import G2p
 
 class Dataset(Dataset):
     def __init__(
@@ -150,6 +151,8 @@ class TextDataset(Dataset):
     def __init__(self, filepath, preprocess_config):
         self.preprocess_config = preprocess_config
         self.cleaners = preprocess_config["preprocessing"]["text"]["text_cleaners"]
+        self.g2p = G2p()
+        self.lexicon = read_lexicon(preprocess_config["path"]["lexicon_path"])
 
         self.basename, self.speaker, self.text, self.raw_text = self.process_meta(
             filepath
@@ -193,6 +196,17 @@ class TextDataset(Dataset):
                 n, s, t, r = line.strip("\n").split("|")
                 name.append(n)
                 speaker.append(s)
+                if t == "": # if phoneme seq is empty generate one!
+                    phones = []
+                    words = re.split(r"([,;.\-\?\!\s+])", r)
+                    for w in words:
+                        if w.lower() in self.lexicon:
+                            phones += self.lexicon[w.lower()]
+                        else:
+                            phones += list(filter(lambda p: p != " ", self.g2p(w)))
+                    phones = "{" + "}{".join(phones) + "}"
+                    phones = re.sub(r"\{[^\w\s]?\}", "{sp}", phones)
+                    t = phones.replace("}{", " ")
                 text.append(t)
                 raw_text.append(r)
             return name, speaker, text, raw_text

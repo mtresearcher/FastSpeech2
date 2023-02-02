@@ -10,23 +10,11 @@ from g2p_en import G2p
 from pypinyin import pinyin, Style
 
 from utils.model import get_model, get_vocoder
-from utils.tools import to_device, synth_samples
+from utils.tools import to_device, synth_samples, read_lexicon
 from dataset import TextDataset
 from text import text_to_sequence
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-
-def read_lexicon(lex_path):
-    lexicon = {}
-    with open(lex_path) as f:
-        for line in f:
-            temp = re.split(r"\s+", line.strip("\n"))
-            word = temp[0]
-            phones = temp[1:]
-            if word.lower() not in lexicon:
-                lexicon[word.lower()] = phones
-    return lexicon
 
 
 def preprocess_english(text, preprocess_config):
