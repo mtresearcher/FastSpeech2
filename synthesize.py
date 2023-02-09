@@ -185,7 +185,7 @@ if __name__ == "__main__":
         dataset = TextDataset(args.source, preprocess_config)
         batchs = DataLoader(
             dataset,
-            batch_size=8,
+            batch_size=1,
             collate_fn=dataset.collate_fn,
         )
     if args.mode == "single":
