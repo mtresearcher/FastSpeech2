@@ -81,7 +81,7 @@ python3 synthesize.py --text "YOUR_DESIRED_TEXT" --restore_step 900000 --mode si
 Phoneme durations can be controlled by specifying custom durations. Lets say you want to modify the durations of speaker `LJ001` and basename `LJ001-0001`, you would have to modify the corresponding preprocessed file to your customized durations, in this case the following file
 `preprocessed_data/LJSpeech/duration/LJSpeech-duration-LJ001-0001.npy`
 
-Once modified, simply run the synthesize command in **batch** mode. 
+Once modified, simply run the synthesize command in **single** mode. 
 
 # Training
 
